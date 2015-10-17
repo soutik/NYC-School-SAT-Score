@@ -1,0 +1,102 @@
+---
+title: "NYC School SAT Score analysis"
+author: "Soutik Chakraborty"
+date: "16 October 2015"
+output: html_document
+---
+
+```{r, echo=FALSE, include = FALSE, cache = FALSE}
+library(jsonlite)
+library(ggplot2)
+library(plyr)
+library(dplyr)
+library(shiny)
+```
+
+***
+***
+
+*This analysis is to find if there are trends in the way students in all schools in NYC score in their* *SAT exams. It also explores if there's a way to find the best schools to be in to do great in SAT for* *students.* 
+
+*For the purpose of this analysis data has been taken from Open Gov Data site -* *https://nycopendata.socrata.com*
+
+
+***
+***
+
+**Step 1:** Gathering the data  
+Pulling NYC data of Schools with average SAT scores. This is easily done using the 'jsonlite' package in R and mentioning the URL from where the table needs to be pulled.
+
+```{r}
+
+SATscores <- fromJSON("https://data.cityofnewyork.us/resource/f9bf-2cp4.json", 
+                      flatten = TRUE)
+```
+
+**Step 2:** Cleaning the data  
+Removing the schools with no reported scores. If one analyses the dataset then it is easy to figure out that there are many schools which have 's' as their reported scores which means that they don't have a reported score or the data is missing.
+
+So we will remove those rows where we don't have a SAT score of a student.
+
+```{r}
+SATscores <- SATscores %>%
+  filter(sat_math_avg_score != "s" | num_of_sat_test_takers != "s" | sat_writing_avg_score != "s" |
+           sat_critical_reading_avg_score != "s") 
+
+SATscores$sat_math_avg_score <- as.numeric(SATscores$sat_math_avg_score) 
+SATscores$num_of_sat_test_takers <- as.numeric(SATscores$num_of_sat_test_takers) 
+SATscores$sat_writing_avg_score <- as.numeric(SATscores$sat_writing_avg_score) 
+SATscores$sat_critical_reading_avg_score <- as.numeric(SATscores$sat_critical_reading_avg_score)
+```
+
+**Step 3:** Exploratory Data analysis
+We explore the data using scatter plots from 'ggplot2' package in R. For this we plot all the variety of SAT scores with each other and try to see if there are some trends visible to us.
+
+We find that the scores have a linear trend when plotted against each other. This means that the students who score well in one section generally tend to perform well in the other as well. We try to fit a 'linear model' line and see that most of the data points like relatively near the line with very few extreme outliers.
+
+```{r}
+g1 <- ggplot(SATscores, aes(x = sat_math_avg_score, y = sat_critical_reading_avg_score)) 
+g1 + geom_point() + geom_smooth(method = lm) + 
+  labs(x = "Avg Math Score", y = "Avg Critical Reading Score") +
+  ggtitle(label = "SAT Math Score v/s Critical Reading scores (NYC Schools)")
+
+g2 <- ggplot(SATscores, aes(x = sat_writing_avg_score, y = sat_critical_reading_avg_score)) 
+g2 + geom_point() + geom_smooth(method = lm) + 
+  labs(x = "Avg Math Score", y = "Avg Critical Reading Score") +
+  ggtitle(label = "SAT Math Score v/s Critical Reading scores (NYC Schools)")
+
+g3 <- ggplot(SATscores, aes(x = sat_math_avg_score, y = sat_writing_avg_score)) 
+g3 + geom_point() + geom_smooth(method = lm) + 
+  labs(x = "Avg Math Score", y = "Avg Critical Reading Score") +
+  ggtitle(label = "SAT Math Score v/s Critical Reading scores (NYC Schools)")
+```
+
+**Step 5:** Select the Top 5 schools in NYC
+Based on our analysis we can say that if a school has the highest average math scores in SAT then the students in general have done well in all sections of the SAT. Hence we select the Top 5 schools for a student to be in to get great marks in SAT.
+
+```{r}
+top5schools <- SATscores %>%
+ arrange(-sat_math_avg_score)
+
+top5schools <- tbl_df(top5schools[c(1:5),])
+
+top5schools$school_name
+```
+
+**Conclusion:**
+
+1. There is a linear corelation between the average SAT math score, average SAT critical reading score & average SAT writing score of students across different schools in NYC.
+
+2. This seems to make a trend that students who do well in SAT are almost always good in all areas of the SAT exam.
+
+3. The Top 5 schools in NYC that produce the highest scoring SAT students can be easily figured from the data
+
+
+**Contact:**
+
+Feel free to use this code as an when you wish to. You can mention my website link http://soutik.github.io in your reference section.
+
+Feel free to drop a comment on this on my mail: soutikc@uw.edu
+
+Thank you!
+
