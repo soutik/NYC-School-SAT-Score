@@ -52,7 +52,7 @@ SATscores$sat_critical_reading_avg_score <- as.numeric(SATscores$sat_critical_re
 **Step 3:** Exploratory Data analysis
 We explore the data using scatter plots from 'ggplot2' package in R. For this we plot all the variety of SAT scores with each other and try to see if there are some trends visible to us.
 
-We find that the scores have a linear trend when plotted against each other. This means that the students who score well in one section generally tend to perform well in the other as well. We try to fit a 'linear model' line and see that most of the data points like relatively near the line with very few extreme outliers.
+We find that the scores have a linear trend when plotted against each other. This means that the students who score well in one section generally tend to perform well in the other as well. **NOT IMPLYING CAUSATION HERE** We try to fit a 'linear model' line and see that most of the data points like relatively near the line with very few extreme outliers.
 
 ```{r}
 g1 <- ggplot(SATscores, aes(x = sat_math_avg_score, y = sat_critical_reading_avg_score)) 
@@ -90,6 +90,10 @@ top5schools$school_name
 2. This seems to make a trend that students who do well in SAT are almost always good in all areas of the SAT exam.
 
 3. The Top 5 schools in NYC that produce the highest scoring SAT students can be easily figured from the data
+
+**Further Work:**
+
+The next steps in this project are going to be able to plot the schools on a map and make an interactive tool tip once hovered over the school which will show the average SAT score of that school. This will be done in Tabluea with more data of the (lattitude, longitude) pulled from Google API.
 
 
 **Contact:**

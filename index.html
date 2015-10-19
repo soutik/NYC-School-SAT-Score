@@ -88,7 +88,7 @@ SATscores$num_of_sat_test_takers &lt;- as.numeric(SATscores$num_of_sat_test_take
 SATscores$sat_writing_avg_score &lt;- as.numeric(SATscores$sat_writing_avg_score) 
 SATscores$sat_critical_reading_avg_score &lt;- as.numeric(SATscores$sat_critical_reading_avg_score)</code></pre>
 <p><strong>Step 3:</strong> Exploratory Data analysis We explore the data using scatter plots from ‘ggplot2’ package in R. For this we plot all the variety of SAT scores with each other and try to see if there are some trends visible to us.</p>
-<p>We find that the scores have a linear trend when plotted against each other. This means that the students who score well in one section generally tend to perform well in the other as well. We try to fit a ‘linear model’ line and see that most of the data points like relatively near the line with very few extreme outliers.</p>
+<p>We find that the scores have a linear trend when plotted against each other. This means that the students who score well in one section generally tend to perform well in the other as well. <strong>NOT IMPLYING CAUSATION HERE</strong> We try to fit a ‘linear model’ line and see that most of the data points like relatively near the line with very few extreme outliers.</p>
 <pre class="r"><code>g1 &lt;- ggplot(SATscores, aes(x = sat_math_avg_score, y = sat_critical_reading_avg_score)) 
 g1 + geom_point() + geom_smooth(method = lm) + 
   labs(x = &quot;Avg Math Score&quot;, y = &quot;Avg Critical Reading Score&quot;) +
@@ -122,6 +122,8 @@ top5schools$school_name</code></pre>
 <li><p>This seems to make a trend that students who do well in SAT are almost always good in all areas of the SAT exam.</p></li>
 <li><p>The Top 5 schools in NYC that produce the highest scoring SAT students can be easily figured from the data</p></li>
 </ol>
+<p><strong>Further Work:</strong></p>
+<p>The next steps in this project are going to be able to plot the schools on a map and make an interactive tool tip once hovered over the school which will show the average SAT score of that school. This will be done in Tabluea with more data of the (lattitude, longitude) pulled from Google API.</p>
 <p><strong>Contact:</strong></p>
 <p>Feel free to use this code as an when you wish to. You can mention my website link <a href="http://soutik.github.io" class="uri">http://soutik.github.io</a> in your reference section.</p>
 <p>Feel free to drop a comment on this on my mail: <a href="mailto:soutikc@uw.edu">soutikc@uw.edu</a></p>
